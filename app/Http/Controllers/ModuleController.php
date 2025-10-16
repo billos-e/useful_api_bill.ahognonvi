@@ -10,11 +10,17 @@ use Illuminate\Support\Facades\Auth;
 class ModuleController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display activated modules.
      */
     public function index()
     {
-        return User_module::all();
+        $module_line = User_module::where('user_id', '=', Auth::user()->id)
+            ->where('active', '=', true)
+            ->join('modules', 'module_id', '=', 'modules.id')
+            ->join('users', 'user_id', '=', 'users.id')
+            ->select('module_id AS id', 'modules.name', 'modules.description')
+            ->get();
+        return $module_line;
     }
 
     /**
