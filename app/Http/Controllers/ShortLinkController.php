@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ShortLink;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class ShortLinkController extends Controller
 {
@@ -30,7 +31,31 @@ class ShortLinkController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'original_url' => 'required|string|starts_with:http,https',
+            'custom_code' => 'string|max:10|unique:short_links,code',
+        ]);
+
+        $code = $request->filled('custom_code') ? $request->custom_code : $this->generate_code();
+
+        $user = ShortLink::create([
+            'user_id' => Auth::user()->id,
+            'original_url' => $request->original_url,
+            'code' => $code,
+            'clicks' => 0
+        ]);
+
+        return response()->json($user, 201);
+    }
+
+    public function generate_code() {
+        $code = Str::random(10);
+
+        if (ShortLink::where('code', $code)->exists()) {
+            return $this->generate_code();
+        }
+
+        return $code;
     }
 
     /**
