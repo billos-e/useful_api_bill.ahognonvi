@@ -24,7 +24,7 @@ class User_module extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function comments(): HasMany {
+    public function module(): HasMany {
         return $this->hasMany(Module::class, 'module_id');
     }
 }
