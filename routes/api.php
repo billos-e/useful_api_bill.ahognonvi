@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ModuleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -12,3 +13,15 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('logout', 'logout')->middleware('auth');;
 
 });
+
+// module routes
+Route::prefix('modules')->name('modules')
+    ->middleware('auth')
+    ->controller(ModuleController::class)
+    ->group(function () {
+
+        Route::get('/', 'index')->name('all');
+        Route::get('/{id}/activate', 'activate')->name('activate');
+        Route::get('/{id}/deactivate', 'deactivate')->name('deactivate');
+    }
+);
