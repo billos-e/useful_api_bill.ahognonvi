@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ModuleController;
+use App\Http\Controllers\ShortLinkController;
 use App\Http\Middleware\CheckModuleActive;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -16,27 +17,26 @@ Route::controller(AuthController::class)->group(function () {
 });
 
 // need to authenticate
-Route::prefix('modules')->name('modules')
-    ->middleware('auth')
+Route::middleware('auth')
     ->group(function () {
 
         // module routes
-        Route::controller(ModuleController::class)->group(function () {
+        Route::prefix('modules')->name('modules')
+            ->controller(ModuleController::class)
+            ->group(function () {
 
-            Route::get('/', 'index')->name('all');
-            Route::get('/{id}/activate', 'activate')->name('activate');
-            Route::get('/{id}/deactivate', 'deactivate')->name('deactivate');
-        });
-
-        // need to activate calling module
-        Route::middleware(CheckModuleActive::class)->group(function () {
-
-            Route::get('/{id}/test', function (Request $request) {
-                return response()->json([
-                            "ms" => 'gooood ooh'
-                        ]);
+                Route::get('/', 'index')->name('all');
+                Route::get('/{id}/activate', 'activate')->name('activate');
+                Route::get('/{id}/deactivate', 'deactivate')->name('deactivate');
             });
-        });
+
+        // module 1 routes
+        Route::controller(ShortLinkController::class)
+            ->middleware(CheckModuleActive::class.':1')
+            ->group(function () {
+
+                Route::get('/links', 'index')->name('all_links');
+            });
 
     }
 );
