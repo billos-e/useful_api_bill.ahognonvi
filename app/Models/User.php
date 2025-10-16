@@ -68,4 +68,19 @@ class User extends Authenticatable implements JWTSubject
             'password' => 'hashed',
         ];
     }
+
+    public function set_basic_modules() {
+
+        $modules = Module::select('id')->get();
+
+        foreach($modules as $module) {
+
+            User_module::create([
+
+                'user_id' => $this->id,
+                'module_id' => $module->id,
+                'active' => false
+            ]);
+        }
+    }
 }
