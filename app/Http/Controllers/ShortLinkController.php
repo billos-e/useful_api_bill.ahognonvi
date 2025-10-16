@@ -58,6 +58,23 @@ class ShortLinkController extends Controller
         return $code;
     }
 
+    public function delete($id, Request $request) {
+
+        $link = ShortLink::find($id);
+
+        if(!$link) {
+            return response()->json([
+                'message' => 'Link unfounded'
+            ],404);
+        }
+
+        $link->delete();
+
+        return response()->json([
+            'message' => 'Link deleted successfully'
+        ]);
+    }
+
     /**
      * Display the specified resource.
      */

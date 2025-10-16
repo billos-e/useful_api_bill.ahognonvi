@@ -36,6 +36,7 @@ Route::middleware('auth')
             ->group(function () {
 
                 Route::get('/links', 'index')->name('all_links');
+                Route::delete('/links/{id}', 'delete')->name('delete');
                 Route::post('/shorten', 'store')->name('short_link');
             });
 
