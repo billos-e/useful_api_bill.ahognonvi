@@ -15,10 +15,10 @@ class CheckModuleActive
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next, String $moduleId): Response
     {
         $module_line = User_module::where('user_id', '=', Auth::user()->id)
-            ->where('module_id', '=', $request->route('id'))
+            ->where('module_id', '=', $moduleId)
             ->get()
             ->first();
 
