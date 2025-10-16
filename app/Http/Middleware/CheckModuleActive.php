@@ -2,8 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User_module;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class CheckModuleActive
@@ -15,9 +17,16 @@ class CheckModuleActive
      */
     public function handle(Request $request, Closure $next): Response
     {
+        $module_line = User_module::where('user_id', '=', Auth::user()->id)
+            ->where('module_id', '=', $request->route('id'))
+            ->get()
+            ->first();
+
+        if($module_line->active) return $next($request);
+
+
         return response()->json([
-                "hello" => $request->route('id')
-            ]);
-        // return $next($request);
+                "error" => "Module inactive. Please activate this module to use it."
+            ], 403);
     }
 }

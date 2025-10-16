@@ -28,11 +28,12 @@ Route::prefix('modules')->name('modules')
             Route::get('/{id}/deactivate', 'deactivate')->name('deactivate');
         });
 
+        // need to activate calling module
         Route::middleware(CheckModuleActive::class)->group(function () {
 
             Route::get('/{id}/test', function (Request $request) {
                 return response()->json([
-                            "hello" => "ooo"
+                            "ms" => 'gooood ooh'
                         ]);
             });
         });
