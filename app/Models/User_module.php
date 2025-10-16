@@ -9,6 +9,16 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class User_module extends Model
 {
     //
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var list<string>
+     */
+    protected $fillable = [
+        'user_id',
+        'module_id',
+        'active',
+    ];
 
     public function user(): BelongsTo {
         return $this->belongsTo(User::class, 'user_id');
