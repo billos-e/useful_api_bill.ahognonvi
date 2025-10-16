@@ -14,7 +14,7 @@ class AuthController extends Controller
         $credentials = $request->validate([
             'name' => 'required|string',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|string',
+            'password' => 'required|string|min:8',
         ]);
 
         $user = User::create([
@@ -33,7 +33,7 @@ class AuthController extends Controller
 
         $credentials = $request->validate([
             'email' => 'required|email',
-            'password' => 'required|string',
+            'password' => 'required|string|min:8',
         ]);
 
         if (! $token = Auth::attempt($credentials)) {
