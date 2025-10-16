@@ -12,9 +12,9 @@ class AuthController extends Controller
     public function register(Request $request) {
 
         $credentials = $request->validate([
-            'name' => 'required|unique:users,name',
+            'name' => 'required|string',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required',
+            'password' => 'required|string',
         ]);
 
         $user = User::create([
@@ -27,5 +27,35 @@ class AuthController extends Controller
 
         return response()->json($user,201);
 
+    }
+
+    public function login(Request $request) {
+
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
+
+        if (! $token = Auth::attempt($credentials)) {
+            return response()->json(['error' => 'Identifiants invalides'], 401);
+        }
+
+        $user = User::where('email', $request->email)->first();
+
+        // if (! $user) return response()->json([
+        //     'message' => 'Utilisateur non trouvé'
+        // ],404);
+
+        return response()->json([
+            'token' => $token,
+            'user_id' => $user->id
+        ],201);
+
+    }
+
+    public function logout() {
+        Auth::logout();
+
+        return response()->json(['message' => 'Déconnecté avec succèss']);
     }
 }

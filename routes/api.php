@@ -11,4 +11,11 @@ Route::get('/user', function (Request $request) {
 // auth routes
 Route::controller(AuthController::class)->group(function () {
     Route::post('/register', 'register')->name('register');
+
+    Route::middleware('api')->group(function () {
+
+        Route::post('login', 'login');
+        Route::post('logout', 'logout');
+
+    });
 });
