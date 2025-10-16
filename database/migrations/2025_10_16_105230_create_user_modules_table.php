@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('user_modules', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('user_id');
             $table->foreignId('module_id');
             $table->boolean('active')->default(false);
