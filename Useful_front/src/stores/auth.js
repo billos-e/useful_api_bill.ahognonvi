@@ -43,6 +43,26 @@ export const useAuthStore = defineStore('counter', {
         }
     },
 
+    async doRegister(data) {
+
+        try {
+
+            const response = await apiService.post('/register', data)
+            if(response.status == 201) {
+                this.error = null
+
+                apiService.defaults.headers.common['Authorization'] = `Bearer ${this.token ?? ''}`;
+
+            } else {
+                this.error = response.data.error
+            }
+        }catch(error) {
+            console.log(error.response.data.error);
+
+            this.error = error.response.data.error
+        }
+    },
+
     async doLogout() {
         try {
 
