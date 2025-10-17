@@ -43,6 +43,28 @@ export const useAuthStore = defineStore('counter', {
         }
     },
 
+    async doLogout() {
+        try {
+
+            const response = await apiService.post('/logout')
+            console.log(response)
+            if(response.status == 200) {
+                this.error = null
+                this.token = null
+
+                console.log(response.data.message);
+                return true;
+
+            } else {
+                this.error = response.data.error
+            }
+        }catch(error) {
+            console.log(error.response.data.error);
+
+            this.error = error.response.data.error
+        }
+    }
+
 
 
   },
