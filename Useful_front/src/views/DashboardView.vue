@@ -3,6 +3,9 @@
     <p>
         {{ mes }}
     </p>
+    <ul>
+        <li v-for="module in moduleStore.modules">Module: {{ module.name }} </li>
+    </ul>
 
 </template>
 
@@ -32,6 +35,7 @@ const logout = async () => {
 }
 
 onMounted(async () => {
-    await moduleStore.getModules()
+    moduleStore.getModules()
+
 })
 </script>

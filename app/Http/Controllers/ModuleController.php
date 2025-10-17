@@ -18,7 +18,7 @@ class ModuleController extends Controller
             // ->where('active', '=', true)
             ->join('modules', 'module_id', '=', 'modules.id')
             ->join('users', 'user_id', '=', 'users.id')
-            ->select('module_id AS id', 'modules.name', 'modules.description', 'user_module.active')
+            ->select('module_id AS id', 'modules.name', 'modules.description', 'user_modules.active')
             ->get();
         return $module_line;
     }

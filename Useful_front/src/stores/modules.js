@@ -1,7 +1,7 @@
 import { apiService } from './services';
 import { defineStore } from 'pinia';
 
-export const useModuleStore = defineStore('counter', {
+export const useModuleStore = defineStore('modules', {
   state: () => ({
     modules: null,
     api: apiService,
@@ -12,22 +12,21 @@ export const useModuleStore = defineStore('counter', {
 
         try {
 
-            const response = await apiService.post('/modules')
+            const response = await apiService.get('/modules')
             console.log(response)
-            if(response.status == 201) {
+            if(response.status == 200) {
                 this.error = null
-                this.token = response.data?.token
 
-                console.log(this.token);
-                apiService.defaults.headers.common['Authorization'] = `Bearer ${this.token ?? ''}`;
+                this.modules = response.data
+                console.log(this.modules);
 
             } else {
                 this.error = response.data.error
             }
         }catch(error) {
-            console.log(error.response.data.error);
+            console.log(error.response.data.message);
 
-            this.error = error.response.data.error
+            this.error = error.response.data.message
         }
     },
 

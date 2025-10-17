@@ -26,9 +26,9 @@ export const useAuthStore = defineStore('counter', {
                 this.error = response.data.error
             }
         }catch(error) {
-            console.log(error.response.data.error);
+            console.log(error.response.data.message);
 
-            this.error = error.response.data.error
+            this.error = error.response.data.message
         }
     },
 
@@ -44,9 +44,9 @@ export const useAuthStore = defineStore('counter', {
                 this.error = response.data.error
             }
         }catch(error) {
-            console.log(error.response.data.error);
+            console.log(error.response.data.message);
 
-            this.error = error.response.data.error
+            this.error = error.response.data.message
         }
     },
 
