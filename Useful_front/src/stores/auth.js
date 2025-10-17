@@ -1,16 +1,5 @@
-import axios from 'axios';
+import { apiService, removeToken, setToken } from './services';
 import { defineStore } from 'pinia';
-
-
-const URL = 'http://127.0.0.1:8000/api'
-const apiService = axios.create({
-  baseURL: URL,
-  headers: {
-    // 'Authorization': `Bearer ${authStore.token ?? ''}`,
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
-  }
-});
 
 export const useAuthStore = defineStore('counter', {
   state: () => ({
@@ -30,18 +19,59 @@ export const useAuthStore = defineStore('counter', {
                 this.error = null
                 this.token = response.data?.token
 
-                console.log(this.token);
-                apiService.defaults.headers.common['Authorization'] = `Bearer ${this.token ?? ''}`;
+                // console.log(this.token);
+                setToken(this.token)
 
             } else {
                 this.error = response.data.error
             }
         }catch(error) {
-            console.log(error.response.data.error);
+            console.log(error.response.data.message);
 
-            this.error = error.response.data.error
+            this.error = error.response.data.message
         }
     },
+
+    async doRegister(data) {
+
+        try {
+
+            const response = await apiService.post('/register', data)
+            if(response.status == 201) {
+                this.error = null
+
+            } else {
+                this.error = response.data.error
+            }
+        }catch(error) {
+            console.log(error.response.data.message);
+
+            this.error = error.response.data.message
+        }
+    },
+
+    async doLogout() {
+        try {
+
+            // console.log(this.token)
+            const response = await apiService.post('/logout')
+            if(response.status == 200) {
+                this.error = null
+                this.token = null
+                removeToken()
+
+                console.log(response.data.message);
+                return true;
+
+            } else {
+                this.error = response.data.error
+            }
+        }catch(error) {
+            console.log(error);
+
+            this.error = error.response.data.message
+        }
+    }
 
 
 
