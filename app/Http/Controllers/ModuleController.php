@@ -15,10 +15,10 @@ class ModuleController extends Controller
     public function index()
     {
         $module_line = User_module::where('user_id', '=', Auth::user()->id)
-            ->where('active', '=', true)
+            // ->where('active', '=', true)
             ->join('modules', 'module_id', '=', 'modules.id')
             ->join('users', 'user_id', '=', 'users.id')
-            ->select('module_id AS id', 'modules.name', 'modules.description')
+            ->select('module_id AS id', 'modules.name', 'modules.description', 'user_module.active')
             ->get();
         return $module_line;
     }
